@@ -38,8 +38,8 @@ const FILTER_TYPES: [ValueType, string][] = [
 ]
 
 const cellTone: Partial<Record<string, string>> = {
-  N: 'text-sky-300',
-  BOOL: 'text-violet-300',
+  N: 'text-number',
+  BOOL: 'text-boolean',
   NULL: 'text-dim italic',
   M: 'text-dim',
   L: 'text-dim',

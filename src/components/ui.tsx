@@ -48,8 +48,8 @@ export function Label({ label, children, className }: { label: string; children:
 export function Badge({ children, tone = 'dim' }: { children: ReactNode; tone?: 'dim' | 'ok' | 'warn' }) {
   const tones = {
     dim: 'bg-raised text-dim',
-    ok: 'bg-emerald-500/15 text-emerald-400',
-    warn: 'bg-amber-500/15 text-amber-400',
+    ok: 'bg-ok/15 text-ok',
+    warn: 'bg-warn/15 text-warn',
   }
   return <span className={cx('rounded px-1.5 py-0.5 text-[11px] font-medium', tones[tone])}>{children}</span>
 }

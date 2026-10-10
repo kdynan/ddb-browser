@@ -12,6 +12,30 @@
   --color-dim: #8b93a3;
   --color-accent: #4c8dff;
   --color-danger: #f0616d;
+  --color-ok: #34d399;
+  --color-warn: #fbbf24;
+  --color-number: #7dd3fc;
+  --color-boolean: #c4b5fd;
+  --color-scrollbar: #515a6e;
+}
+
+/* The values above are the dark palette; data-theme is set in index.html and src/theme.ts. */
+:root[data-theme='light'] {
+  --color-bg: #f5f6f8;
+  --color-panel: #ffffff;
+  --color-raised: #eef0f4;
+  --color-hover: #e2e6ed;
+  --color-line: #d3d8e0;
+  --color-fg: #1c2330;
+  --color-dim: #5d6879;
+  --color-accent: #2563eb;
+  --color-danger: #c62f3f;
+  --color-ok: #047857;
+  --color-warn: #a45a04;
+  --color-number: #0b62a3;
+  --color-boolean: #6d28d9;
+  --color-scrollbar: #b4bbc7;
+  color-scheme: light;
 }
 
 html,
@@ -24,12 +48,15 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-size: 13px;
+}
+
+:root {
   color-scheme: dark;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #515a6e transparent;
+  scrollbar-color: var(--color-scrollbar) transparent;
 }
 
 .cm-editor {

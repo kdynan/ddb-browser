@@ -1,7 +1,7 @@
 // Desktop entry point: runs the server in-process and shows the UI in a window.
 import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
-import { app, BrowserWindow, dialog, shell } from 'electron'
+import { app, BrowserWindow, dialog, nativeTheme, shell } from 'electron'
 import { startServer } from '../server/app.ts'
 
 // A fixed port keeps the page's origin, and so its saved settings, the same between launches.
@@ -26,7 +26,8 @@ function createWindow(url: string) {
     minWidth: 800,
     minHeight: 500,
     title: 'DDB Browser',
-    backgroundColor: '#111318',
+    // Shown for a moment before the page paints; matches the page background.
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#111318' : '#f5f6f8',
     autoHideMenuBar: true,
     show: false,
   })

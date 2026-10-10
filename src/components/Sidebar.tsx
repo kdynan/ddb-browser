@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { Info, Plus, RefreshCw, Table2 } from 'lucide-react'
+import { Info, Monitor, Moon, Plus, RefreshCw, Sun, Table2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { LOCAL_PROFILE } from '../../shared/types.ts'
 import { api, type Conn } from '../api.ts'
+import { setThemePreference, type ThemePreference, useTheme } from '../theme.ts'
 import { AboutDialog } from './AboutDialog.tsx'
 import { Button, ErrorBox, Input, Label, Select } from './ui.tsx'
 
@@ -38,6 +39,12 @@ const REGIONS = [
   'il-central-1',
 ]
 
+const THEMES: [ThemePreference, string, typeof Sun][] = [
+  ['system', 'Match the system theme', Monitor],
+  ['light', 'Light theme', Sun],
+  ['dark', 'Dark theme', Moon],
+]
+
 interface Props {
   width: number
   conn: Conn
@@ -51,6 +58,7 @@ interface Props {
 export function Sidebar({ width, conn, connKey, onConnChange, selected, onSelect, onCreate }: Props) {
   const [search, setSearch] = useState('')
   const [about, setAbout] = useState(false)
+  const { preference } = useTheme()
   const profiles = useQuery({ queryKey: ['profiles'], queryFn: api.profiles, refetchOnWindowFocus: true })
   const tables = useQuery({
     queryKey: ['tables', connKey],
@@ -147,7 +155,7 @@ export function Sidebar({ width, conn, connKey, onConnChange, selected, onSelect
             title={t}
             onClick={() => onSelect(t)}
             className={`flex w-full items-center gap-2 rounded px-2 py-1 text-left hover:bg-hover ${
-              t === selected ? 'bg-accent/20 text-white' : ''
+              t === selected ? 'bg-accent/20' : ''
             }`}
           >
             <Table2 size={13} className="shrink-0 text-dim" />
@@ -159,14 +167,32 @@ export function Sidebar({ width, conn, connKey, onConnChange, selected, onSelect
         )}
       </div>
 
-      <button
-        type="button"
-        onClick={() => setAbout(true)}
-        className="flex items-center gap-1.5 border-t border-line px-3 py-1.5 text-left text-[11px] text-dim hover:bg-hover hover:text-fg"
-      >
-        <Info size={12} />
-        DDB Browser v{__APP_VERSION__}
-      </button>
+      <div className="flex items-stretch border-t border-line text-[11px] text-dim">
+        <button
+          type="button"
+          onClick={() => setAbout(true)}
+          className="flex min-w-0 flex-1 items-center gap-1.5 px-3 py-1.5 text-left hover:bg-hover hover:text-fg"
+        >
+          <Info size={12} className="shrink-0" />
+          <span className="truncate">DDB Browser v{__APP_VERSION__}</span>
+        </button>
+        <div role="radiogroup" aria-label="Theme" className="flex items-center gap-0.5 px-1.5">
+          {THEMES.map(([id, label, Icon]) => (
+            <button
+              type="button"
+              key={id}
+              role="radio"
+              aria-checked={preference === id}
+              aria-label={label}
+              title={label}
+              onClick={() => setThemePreference(id)}
+              className={`rounded p-1 hover:bg-hover hover:text-fg ${preference === id ? 'bg-hover text-fg' : ''}`}
+            >
+              <Icon size={13} />
+            </button>
+          ))}
+        </div>
+      </div>
       {about && <AboutDialog onClose={() => setAbout(false)} />}
     </aside>
   )

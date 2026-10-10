@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react'
 import type { Item, TableDesc } from '../../shared/types.ts'
 import { ApiError, api } from '../api.ts'
 import { convertNewlines, fromPlainItem, isLossyItem, keyString, pickKey, toPlainItem } from '../ddb.ts'
+import { useTheme } from '../theme.ts'
 import { Button, ConfirmButton, ErrorBox } from './ui.tsx'
 
 type Format = 'plain' | 'ddb'
@@ -37,6 +38,7 @@ function parse(text: string, format: Format): Item {
 
 export function ItemEditor({ table, item, focusAttr, onClose, onSaved, onDeleted }: Props) {
   const keys = useMemo(() => table.KeySchema.map((k) => k.AttributeName), [table])
+  const { theme } = useTheme()
   // A duplicated item is edited as a new one, so track the original separately.
   const [original, setOriginal] = useState(item)
   const template = useMemo<Item>(
@@ -208,7 +210,7 @@ export function ItemEditor({ table, item, focusAttr, onClose, onSaved, onDeleted
             autoFocus
             value={text}
             height="100%"
-            theme="dark"
+            theme={theme}
             extensions={extensions}
             onCreateEditor={(view) => {
               const at = focusAttr === undefined ? -1 : text.indexOf(`\n  ${JSON.stringify(focusAttr)}:`)
@@ -227,7 +229,7 @@ export function ItemEditor({ table, item, focusAttr, onClose, onSaved, onDeleted
 
         <div className="flex flex-col gap-2 border-t border-line px-4 py-2.5">
           {confirmMove && (
-            <p className="text-amber-400">
+            <p className="text-warn">
               The key changed. Keys can't be updated in place, so saving will create a new item and delete the
               original. Save again to confirm.
             </p>
