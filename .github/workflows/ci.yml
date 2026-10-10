@@ -23,8 +23,8 @@ jobs:
       # Use the service container instead of downloading DynamoDB Local.
       DYNAMODB_ENDPOINT: http://localhost:8000
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -50,8 +50,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -59,7 +59,7 @@ jobs:
       - name: Make sure the Electron binary is downloaded
         run: node node_modules/electron/install.js
       - name: Desktop tests
-        run: xvfb-run --auto-servernum npm run test:desktop
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" npm run test:desktop
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
