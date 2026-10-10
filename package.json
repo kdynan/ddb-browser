@@ -10,7 +10,11 @@
     "build:desktop": "vite build && esbuild electron/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist-electron/main.cjs",
     "desktop": "npm run build:desktop && electron .",
     "dist": "npm run build:desktop && electron-builder",
-    "dist:win": "npm run build:desktop && electron-builder --win zip -c.win.signAndEditExecutable=false"
+    "dist:win": "npm run build:desktop && electron-builder --win zip -c.win.signAndEditExecutable=false",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:desktop": "npm run build:desktop && playwright test -c playwright.desktop.config.ts",
+    "test:all": "npm test && npm run test:e2e && npm run test:desktop"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1149.0",
@@ -28,6 +32,7 @@
     "tsx": "^4.23.15"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
@@ -39,7 +44,8 @@
     "esbuild": "^0.28.2",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vite": "^8.3.4"
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
   },
   "private": true,
   "type": "module",

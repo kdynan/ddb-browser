@@ -3,3 +3,7 @@ dist
 *.log
 dist-electron
 release
+test-results
+playwright-report
+tests/.no-aws-*
+playwright-report-desktop

@@ -57,7 +57,10 @@ export function Badge({ children, tone = 'dim' }: { children: ReactNode; tone?: 
 export function ErrorBox({ error, children }: { error: unknown; children?: ReactNode }) {
   if (!error) return null
   return (
-    <div className="flex items-start gap-2 rounded border border-danger/40 bg-danger/10 px-3 py-2 text-danger">
+    <div
+      role="alert"
+      className="flex items-start gap-2 rounded border border-danger/40 bg-danger/10 px-3 py-2 text-danger"
+    >
       <span className="min-w-0 flex-1 break-words whitespace-pre-wrap">
         {error instanceof Error ? error.message : String(error)}
       </span>

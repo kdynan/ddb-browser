@@ -29,6 +29,23 @@ else needs to be started. On Windows it reads profiles from `%USERPROFILE%\.aws`
 
 If `npm run desktop` reports that Electron failed to install, run `node node_modules/electron/install.js`.
 
+## Tests
+
+```sh
+npm test               # unit tests, plus API tests against a real DynamoDB Local
+npm run test:e2e       # browser tests of the whole app (first run: npx playwright install chromium)
+npm run test:desktop   # builds the Electron app and smoke-tests it
+npm run test:all       # everything
+```
+
+The API and browser tests need a DynamoDB to talk to. By default they download DynamoDB Local
+once (into `node_modules/.cache`) and run it with Java. To use one that is already running,
+set `DYNAMODB_ENDPOINT`, e.g. `DYNAMODB_ENDPOINT=http://localhost:8000 npm test`.
+
+Tests never use your real AWS profiles: they point the AWS config at files that don't exist
+and connect only to the local database. `.github/workflows/ci.yml` runs all of this on every
+push and pull request.
+
 ## Layout
 
 - `server/` – Hono API that talks to DynamoDB with the AWS SDK. Listens on 127.0.0.1 only and
@@ -36,3 +53,4 @@ If `npm run desktop` reports that Electron failed to install, run `node node_mod
 - `electron/main.ts` – desktop entry point; starts the server and opens the window.
 - `src/` – React UI (Vite, Tailwind, CodeMirror).
 - `shared/types.ts` – request/response types used by both.
+- `tests/` – `unit/` and `api/` (Vitest), `e2e/` (Playwright in a browser), `desktop/` (Playwright driving Electron).

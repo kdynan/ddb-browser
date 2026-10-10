@@ -45,7 +45,9 @@ export function getClient(conn: Conn): DynamoDBClient {
 export async function listProfiles(): Promise<Profile[]> {
   const empty: Awaited<ReturnType<typeof loadSharedConfigFiles>> = { configFile: {}, credentialsFile: {} }
   const { configFile, credentialsFile } = await loadSharedConfigFiles({ ignoreCache: true }).catch(() => empty)
-  const names = [...new Set([...Object.keys(configFile), ...Object.keys(credentialsFile)])].sort(
+  // The config file also holds [sso-session x] and [services x] sections, which aren't profiles.
+  const isProfile = (name: string) => !name.startsWith('sso-session.') && !name.startsWith('services.')
+  const names = [...new Set([...Object.keys(configFile).filter(isProfile), ...Object.keys(credentialsFile)])].sort(
     (a, b) => (a === 'default' ? -1 : b === 'default' ? 1 : a.localeCompare(b)),
   )
   const profiles: Profile[] = names.map((name) => ({ name, region: configFile[name]?.region }))

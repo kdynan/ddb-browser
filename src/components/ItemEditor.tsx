@@ -5,7 +5,7 @@ import { Copy, Pilcrow, Save, Trash2, WrapText, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import type { Item, TableDesc } from '../../shared/types.ts'
 import { ApiError, api } from '../api.ts'
-import { fromPlainItem, isLossyItem, keyString, pickKey, toPlainItem } from '../ddb.ts'
+import { convertNewlines, fromPlainItem, isLossyItem, keyString, pickKey, toPlainItem } from '../ddb.ts'
 import { Button, ConfirmButton, ErrorBox } from './ui.tsx'
 
 type Format = 'plain' | 'ddb'
@@ -23,30 +23,6 @@ interface Props {
 
 const WRAP_KEY = 'ddb-browser.editor.wrap'
 const BREAKS_KEY = 'ddb-browser.editor.lineBreaks'
-
-/**
- * Converts between JSON and the "line breaks" view, where \n escapes inside
- * strings are shown as real newlines. Valid JSON never has a raw newline in a
- * string, so the two forms convert back and forth without loss.
- */
-function convertNewlines(text: string, to: 'breaks' | 'json'): string {
-  let out = ''
-  let inString = false
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i]
-    if (inString && ch === '\\') {
-      const next = text[i + 1] ?? ''
-      out += to === 'breaks' && next === 'n' ? '\n' : ch + next
-      i++
-    } else if (inString && ch === '\n' && to === 'json') {
-      out += '\\n'
-    } else {
-      if (ch === '"') inString = !inString
-      out += ch
-    }
-  }
-  return out
-}
 
 const stringify = (item: Item, format: Format) =>
   JSON.stringify(format === 'plain' ? toPlainItem(item) : item, null, 2)

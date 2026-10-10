@@ -47,7 +47,7 @@ const LOOPBACK = new Set(['localhost', '127.0.0.1', '[::1]'])
 const FILTER_PAGE_SIZE = 1000
 const FILTER_MAX_PAGES = 10
 
-const app = new Hono()
+export const app = new Hono()
 
 // This server holds AWS credentials, so refuse anything that isn't a
 // same-origin request from the local machine (blocks CSRF and DNS rebinding).
@@ -121,7 +121,7 @@ function toAV(tv: TypedValue, which: 'value' | 'value2' = 'value'): AttributeVal
   }
 }
 
-function buildExpressions(body: QueryBody) {
+export function buildExpressions(body: QueryBody) {
   const names: Record<string, string> = {}
   const values: Record<string, AttributeValue> = {}
   const name = (n: string) => {

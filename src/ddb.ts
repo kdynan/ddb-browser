@@ -71,3 +71,27 @@ export function formatBytes(n = 0): string {
   }
   return `${i ? n.toFixed(1) : n} ${units[i]}`
 }
+
+/**
+ * Converts between JSON and the "line breaks" view, where \n escapes inside
+ * strings are shown as real newlines. Valid JSON never has a raw newline in a
+ * string, so the two forms convert back and forth without loss.
+ */
+export function convertNewlines(text: string, to: 'breaks' | 'json'): string {
+  let out = ''
+  let inString = false
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i]
+    if (inString && ch === '\\') {
+      const next = text[i + 1] ?? ''
+      out += to === 'breaks' && next === 'n' ? '\n' : ch + next
+      i++
+    } else if (inString && ch === '\n' && to === 'json') {
+      out += '\\n'
+    } else {
+      if (ch === '"') inString = !inString
+      out += ch
+    }
+  }
+  return out
+}
