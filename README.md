@@ -72,3 +72,7 @@ push and pull request.
 - `src/` – React UI (Vite, Tailwind, CodeMirror).
 - `shared/types.ts` – request/response types used by both.
 - `tests/` – `unit/` and `api/` (Vitest), `e2e/` (Playwright in a browser), `desktop/` (Playwright driving Electron).
+
+## License
+
+[MIT](LICENSE)

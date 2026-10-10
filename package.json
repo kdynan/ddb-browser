@@ -52,6 +52,7 @@
   "productName": "DDB Browser",
   "description": "Desktop browser for DynamoDB",
   "author": "Keith Dynan",
+  "license": "MIT",
   "main": "dist-electron/main.cjs",
   "build": {
     "appId": "com.kdynan.ddb-browser",
