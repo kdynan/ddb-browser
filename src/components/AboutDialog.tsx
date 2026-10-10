@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { Database } from 'lucide-react'
 import { api } from '../api.ts'
 import { Button, ErrorBox, Modal } from './ui.tsx'
 
@@ -20,7 +19,7 @@ export function AboutDialog({ onClose }: { onClose: () => void }) {
   return (
     <Modal title="About" onClose={onClose} width="w-[460px]" footer={<Button onClick={onClose}>Close</Button>}>
       <div className="flex items-center gap-3">
-        <Database size={34} strokeWidth={1.3} className="shrink-0 text-accent" />
+        <img src="/icon.svg" alt="" className="size-10 shrink-0" />
         <div>
           <div className="text-base font-semibold">DDB Browser</div>
           <div className="text-dim">Search, edit and manage DynamoDB tables and items.</div>

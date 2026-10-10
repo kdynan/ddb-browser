@@ -18,7 +18,7 @@ function savedSize(): { width?: number; height?: number } {
   }
 }
 
-function createWindow(url: string) {
+function createWindow(url: string, icon: string) {
   const win = new BrowserWindow({
     width: 1400,
     height: 900,
@@ -26,6 +26,8 @@ function createWindow(url: string) {
     minWidth: 800,
     minHeight: 500,
     title: 'DDB Browser',
+    // Used on Linux; Windows and macOS take the icon from the packaged app.
+    icon,
     // Shown for a moment before the page paints; matches the page background.
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#111318' : '#f5f6f8',
     autoHideMenuBar: true,
@@ -65,7 +67,7 @@ if (!app.requestSingleInstanceLock()) {
       const port = await startServer({ port: PREFERRED_PORT, staticDir }).catch(() =>
         startServer({ port: 0, staticDir }),
       )
-      createWindow(`http://127.0.0.1:${port}`)
+      createWindow(`http://127.0.0.1:${port}`, path.join(staticDir, 'icon.png'))
     })
     .catch((err) => {
       dialog.showErrorBox('DDB Browser failed to start', String(err?.stack ?? err))
