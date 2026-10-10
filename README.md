@@ -29,6 +29,24 @@ else needs to be started. On Windows it reads profiles from `%USERPROFILE%\.aws`
 
 If `npm run desktop` reports that Electron failed to install, run `node node_modules/electron/install.js`.
 
+### Releases
+
+Pushing a version tag builds the packages on GitHub and publishes a release with them attached:
+
+```sh
+npm version patch   # or minor / major: bumps package.json and creates the tag
+git push --follow-tags
+```
+
+The release has an AppImage for Linux, an installer and a portable zip for Windows, and a `.dmg`
+for macOS (Apple silicon and Intel). The tag must match the version in `package.json`. To try the
+build without releasing, run the Release workflow by hand from the Actions tab; the packages are
+attached to the run.
+
+The packages are not code signed. Windows shows a SmartScreen warning (More info → Run anyway).
+macOS reports a downloaded app as damaged until its quarantine flag is cleared:
+`xattr -cr "/Applications/DDB Browser.app"`.
+
 ## Tests
 
 ```sh
