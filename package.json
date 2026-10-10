@@ -6,7 +6,11 @@
     "build": "vite build",
     "start": "vite build && tsx server/index.ts",
     "serve": "tsx server/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:desktop": "vite build && esbuild electron/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=dist-electron/main.cjs",
+    "desktop": "npm run build:desktop && electron .",
+    "dist": "npm run build:desktop && electron-builder",
+    "dist:win": "npm run build:desktop && electron-builder --win zip -c.win.signAndEditExecutable=false"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1149.0",
@@ -30,10 +34,42 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "concurrently": "^10.0.6",
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.4"
   },
   "private": true,
-  "type": "module"
+  "type": "module",
+  "productName": "DDB Browser",
+  "description": "Desktop browser for DynamoDB",
+  "author": "Keith Dynan",
+  "main": "dist-electron/main.cjs",
+  "build": {
+    "appId": "com.kdynan.ddb-browser",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "package.json",
+      "!node_modules"
+    ],
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Development",
+      "executableName": "ddb-browser"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "artifactName": "ddb-browser-${version}-${os}-${arch}.${ext}"
+  }
 }
