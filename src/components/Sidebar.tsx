@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { Plus, RefreshCw, Table2 } from 'lucide-react'
+import { Info, Plus, RefreshCw, Table2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { LOCAL_PROFILE } from '../../shared/types.ts'
 import { api, type Conn } from '../api.ts'
+import { AboutDialog } from './AboutDialog.tsx'
 import { Button, ErrorBox, Input, Label, Select } from './ui.tsx'
 
 const REGIONS = [
@@ -49,6 +50,7 @@ interface Props {
 
 export function Sidebar({ width, conn, connKey, onConnChange, selected, onSelect, onCreate }: Props) {
   const [search, setSearch] = useState('')
+  const [about, setAbout] = useState(false)
   const profiles = useQuery({ queryKey: ['profiles'], queryFn: api.profiles, refetchOnWindowFocus: true })
   const tables = useQuery({
     queryKey: ['tables', connKey],
@@ -156,6 +158,16 @@ export function Sidebar({ width, conn, connKey, onConnChange, selected, onSelect
           <p className="p-3 text-center text-dim">{needle ? 'No matching tables' : 'No tables in this region'}</p>
         )}
       </div>
+
+      <button
+        type="button"
+        onClick={() => setAbout(true)}
+        className="flex items-center gap-1.5 border-t border-line px-3 py-1.5 text-left text-[11px] text-dim hover:bg-hover hover:text-fg"
+      >
+        <Info size={12} />
+        DDB Browser v{__APP_VERSION__}
+      </button>
+      {about && <AboutDialog onClose={() => setAbout(false)} />}
     </aside>
   )
 }

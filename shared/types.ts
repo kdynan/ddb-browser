@@ -104,6 +104,16 @@ export interface Profile {
   region?: string
 }
 
+/** Where the server is running, for the About dialog. */
+export interface RuntimeInfo {
+  node: string
+  /** Set only in the desktop app. */
+  electron?: string
+  chrome?: string
+  os: string
+  awsDir: string
+}
+
 export interface KeySchemaEl {
   AttributeName: string
   KeyType: 'HASH' | 'RANGE'

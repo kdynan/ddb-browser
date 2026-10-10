@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises'
+import os from 'node:os'
 import path from 'node:path'
 import {
   type AttributeValue,
@@ -32,6 +33,7 @@ import type {
   PutItemBody,
   QueryBody,
   QueryResult,
+  RuntimeInfo,
   TtlBody,
   TypedValue,
   UpdateTableBody,
@@ -183,6 +185,17 @@ function buildExpressions(body: QueryBody) {
     ExpressionAttributeValues: Object.keys(values).length ? values : undefined,
   }
 }
+
+app.get('/api/about', (c) => {
+  const info: RuntimeInfo = {
+    node: process.versions.node,
+    electron: process.versions.electron,
+    chrome: process.versions.chrome,
+    os: `${os.type()} ${os.release()} (${os.arch()})`,
+    awsDir: path.dirname(process.env.AWS_CONFIG_FILE ?? path.join(os.homedir(), '.aws', 'config')),
+  }
+  return c.json(info)
+})
 
 app.get('/api/profiles', async (c) => c.json(await listProfiles()))
 

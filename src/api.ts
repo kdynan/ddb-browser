@@ -6,6 +6,7 @@ import type {
   PutItemBody,
   QueryBody,
   QueryResult,
+  RuntimeInfo,
   TableDesc,
   TtlBody,
   UpdateTableBody,
@@ -60,6 +61,7 @@ async function req<T>(method: string, path: string, body?: unknown): Promise<T> 
 const t = (name: string) => `/tables/${encodeURIComponent(name)}`
 
 export const api = {
+  about: () => req<RuntimeInfo>('GET', '/about'),
   profiles: () => req<Profile[]>('GET', '/profiles'),
   tables: () => req<string[]>('GET', '/tables'),
   describe: (name: string) => req<TableDesc>('GET', t(name)),
